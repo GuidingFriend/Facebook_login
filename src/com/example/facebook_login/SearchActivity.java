@@ -177,6 +177,8 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		Intent intent = new Intent(this, PlacesListViewActivity.class);
+		startActivity(intent);
 		String text_from_search = text_search.getText().toString();
 		Toast.makeText(SearchActivity.this,text_from_search,Toast.LENGTH_SHORT).show();
 		

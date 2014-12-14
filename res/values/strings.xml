@@ -15,5 +15,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
+    <string name="title_activity_places_list">PlacesListActivity</string>
+    <string name="title_activity_main_activity2">MainActivity2</string>
+    <string name="title_activity_places_list_view">PlacesListViewActivity</string>
 
 </resources>
