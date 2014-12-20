@@ -1,12 +1,22 @@
 package com.example.facebook_login;
 
+import com.example.facbook_login.placepicker.PickPlaceActivity;
+import com.example.facbook_login.placepicker.PlacePickerApplication;
+import com.example.facbook_login.placepicker.PlacePickerSampleActivity;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
+import com.facebook.model.GraphLocation;
+import com.facebook.model.GraphPlace;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,14 +27,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.AdapterView.OnItemClickListener;
 
 
 public class SearchActivity extends ActionBarActivity implements OnClickListener, LocationListener{
+	    
 	private EditText text_search, text_nearby;
 	private ImageButton search_button, nearby_button;
 	private TextView access_token;
@@ -40,6 +52,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	protected LocationListener locationListener;
 	protected Context context;
 	TextView txtLat;
+	private String locationData;
 	String lat;
 	String provider;
 	protected String latitude,longitude; 
@@ -50,6 +63,11 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
+		
+		
+		
+	
+		 
 		txtLat = (TextView) findViewById(R.id.textView11);
 		
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -72,30 +90,55 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 			LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES,
 			MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 			};
+			
+			
+			
+			
+	
+		
+		
 		//txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
 //		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 //		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
+			
+			
+			//working code
 		txtLat = (TextView) findViewById(R.id.textView11);
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
 		
 		text_search = (EditText)findViewById(R.id.text_search);
 		text_nearby = (EditText)findViewById(R.id.text_nearby);
-		access_token = (TextView)findViewById(R.id.access_token);
+//		access_token = (TextView)findViewById(R.id.access_token);
 		search_button = (ImageButton)findViewById(R.id.search_button);
-		nearby_button = (ImageButton)findViewById(R.id.nearby_button);
+		nearby_button = (ImageButton)findViewById(R.id.gpsButton);
 		search_button.setOnClickListener(this);
-//		Intent intent = getIntent();
+		nearby_button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(SearchActivity.this, MapActivity.class);
+				startActivity(i);
+                Toast.makeText(getBaseContext(),"Opening Map..",Toast.LENGTH_SHORT).show();
+//                onClickGPS();
+               
+            }
+           
+        });
+		
+		//		Intent intent = getIntent();
 //		Bundle newbundle = intent.getExtras();
 //		String access = newbundle.getString("Access Token");
 //		access_token.setText(access);
 	}
 	
-
+	
 	@Override
 	public void onLocationChanged(Location location) {
-	txtLat = (TextView) findViewById(R.id.textView11);
+	txtLat = (TextView) findViewById(R.id.text_nearby);
 	txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
+	locationData = txtLat.toString();
+	
 	}
 
 	@Override
@@ -113,11 +156,6 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	Log.d("Latitude","status");
 	}
 		
-	
-
-
-	
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -140,6 +178,8 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	@Override
     protected void onStart() {
         super.onStart();
+    
+        
     //        if (!mResolvingError) {  // more about this later
 //            mGoogleApiClient.connect();
 //        }
@@ -159,28 +199,48 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
     
     @Override
     public void onPause() {
-
+    	super.onPause();
+    
         // Save the current setting for updates
     
-        super.onPause();
+//        super.onPause();
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+      
     }
     
     @Override
     public void onResume() {
         super.onResume();
-
+      
         // If the app already has a setting for getting location updates, get it
        
 
     }
     
+    private void onError(Exception exception) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Error").setMessage(exception.getMessage()).setPositiveButton("OK", null);
+        builder.show();
+    }
+    
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+      
+    }
+    
+      
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(this, PlacesListViewActivity.class);
+		Intent intent = new Intent(SearchActivity.this, PlacesListViewActivity.class);
+		intent.putExtra("Location",locationData);
 		startActivity(intent);
-		String text_from_search = text_search.getText().toString();
-		Toast.makeText(SearchActivity.this,text_from_search,Toast.LENGTH_SHORT).show();
+//		String text_from_search = text_search.getText().toString();
+//		Toast.makeText(SearchActivity.this,text_from_search,Toast.LENGTH_SHORT).show();
 		
 		
 		

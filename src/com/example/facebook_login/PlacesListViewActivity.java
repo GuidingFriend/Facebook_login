@@ -18,18 +18,24 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class PlacesListViewActivity extends Activity {
+public class PlacesListViewActivity extends Activity implements OnItemClickListener{
 	private static final String TAG = PlacesListViewActivity.class.getSimpleName();
 
 	// Movies json url
@@ -38,16 +44,43 @@ public class PlacesListViewActivity extends Activity {
 	private List<Movie> movieList = new ArrayList<Movie>();
 	private ListView listView;
 	private CustomListAdapter adapter;
+	private Movie getItem;
+	
+//	int gallery_grid_Images[]={R.drawable.afghanistan,R.drawable.bangladesh,R.drawable.china,
+//	        R.drawable.india,R.drawable.japan,R.drawable.nepal,R.drawable.srilanka,
+//	        R.drawable.skorea
+//	        };
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_places_list_view);
-
+		
 		listView = (ListView) findViewById(R.id.list);
 		adapter = new CustomListAdapter(this, movieList);
 		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener() {
 
+	        @Override
+	        public void onItemClick(AdapterView<?> parent, View view,
+	                int position, long id) {
+	        	String getData = listView.getItemAtPosition(position).toString();
+	        	Toast.makeText(PlacesListViewActivity.this,getData,Toast.LENGTH_SHORT).show();
+//	        	Log.d("itemSelected", getData);
+//	        	getItem = (Movie)parent.getItem(position);
+//	        	getItem = (Movie) listView.getSelectedItem();
+//	        	String getData = getItem.getData();
+//	        	Log.d("itemSelected", getItem);
+	        	Intent intent = new Intent(PlacesListViewActivity.this, FlipPlacesActivity.class);
+	        	intent.putExtra("GetData",getData);
+	        	startActivity(intent);
+	        	
+	        }
+	       
+		});
+		
+		 
+				
 		pDialog = new ProgressDialog(this);
 		// Showing progress dialog before making http request
 		pDialog.setMessage("Loading...");
@@ -128,6 +161,14 @@ public class PlacesListViewActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.places_list, menu);
 		return true;
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this, FlipPlacesActivity.class);
+		startActivity(intent);
 	}
 
 }
