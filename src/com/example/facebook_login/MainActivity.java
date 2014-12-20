@@ -52,6 +52,7 @@ public class MainActivity extends FragmentActivity implements Serializable{
     
     final int totalProgressTime = 100;
 
+    private Session session;
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -61,6 +62,7 @@ public class MainActivity extends FragmentActivity implements Serializable{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        
             
         uiHelper = new UiLifecycleHelper(this, statusCallback);
         uiHelper.onCreate(savedInstanceState);
@@ -68,8 +70,11 @@ public class MainActivity extends FragmentActivity implements Serializable{
         mAsyncRunner = new AsyncFacebookRunner(facebook);
         access_token = (TextView) findViewById(R.id.access_token);
         userName = (TextView) findViewById(R.id.user_name);
+
+
+        
 //        user_access = facebook.getAuthResponse();
-        user_access = "CAACEdEose0cBAIiZAtSy2cJeYpZCZCgbbNZBJzikCNDYSIlv7mSjpO3E7LJhOH0IvmnaGuwoM8PmhAsaGZAjAckK439BjZCuhXFukequiVF0ELQOUFTF3J3J3t5Hb3D9uCVSiRE4ZA2TMxZAF8OtTfIb4BGrFngVuDRhPbZCmcZBbQKEhlTDovL7mRAEqcCsWSBeuIO4ZAcD2gjsK8UsXJHP1q4";
+//        user_access = "CAACEdEose0cBAIiZAtSy2cJeYpZCZCgbbNZBJzikCNDYSIlv7mSjpO3E7LJhOH0IvmnaGuwoM8PmhAsaGZAjAckK439BjZCuhXFukequiVF0ELQOUFTF3J3J3t5Hb3D9uCVSiRE4ZA2TMxZAF8OtTfIb4BGrFngVuDRhPbZCmcZBbQKEhlTDovL7mRAEqcCsWSBeuIO4ZAcD2gjsK8UsXJHP1q4";
         System.out.println("Access Token : " + user_access);
 //        access_token.toString();
 //        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
@@ -135,6 +140,12 @@ public class MainActivity extends FragmentActivity implements Serializable{
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
+        Session session = Session.getActiveSession();
+        
+        if (session.isOpened()) {
+        	Intent i = new Intent(MainActivity.this,SearchActivity.class);
+            startActivity(i);
+        }
         
     }
 

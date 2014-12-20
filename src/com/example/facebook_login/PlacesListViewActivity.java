@@ -95,7 +95,7 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 				new Response.Listener<JSONArray>() {
 					@Override
 					public void onResponse(JSONArray response) {
-						Log.d(TAG, response.toString());
+//						Log.d(TAG, response.toString());
 						hidePDialog();
 
 						// Parsing json
