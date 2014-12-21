@@ -39,12 +39,14 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	private static final String TAG = PlacesListViewActivity.class.getSimpleName();
 
 	// Movies json url
-	private static final String url = "http://api.androidhive.info/json/movies.json";
+//	private static final String url = "http://api.androidhive.info/json/movies.json";
+	private static final String url = "http://arhamweb.com/movies.json";
 	private ProgressDialog pDialog;
 	private List<Movie> movieList = new ArrayList<Movie>();
 	private ListView listView;
 	private CustomListAdapter adapter;
 	private Movie getItem;
+	Movie movie = new Movie();
 	
 //	int gallery_grid_Images[]={R.drawable.afghanistan,R.drawable.bangladesh,R.drawable.china,
 //	        R.drawable.india,R.drawable.japan,R.drawable.nepal,R.drawable.srilanka,
@@ -64,7 +66,9 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view,
 	                int position, long id) {
+	        	
 	        	String getData = listView.getItemAtPosition(position).toString();
+//	        	String getItemData = listView.getSelectedItem().toString();
 	        	Toast.makeText(PlacesListViewActivity.this,getData,Toast.LENGTH_SHORT).show();
 //	        	Log.d("itemSelected", getData);
 //	        	getItem = (Movie)parent.getItem(position);
@@ -72,7 +76,28 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 //	        	String getData = getItem.getData();
 //	        	Log.d("itemSelected", getItem);
 	        	Intent intent = new Intent(PlacesListViewActivity.this, FlipPlacesActivity.class);
-	        	intent.putExtra("GetData",getData);
+//	        	intent.putExtra("GetData",getData);
+//	        	intent.putExtra("Latlong",movie);
+	        	
+	        	String movielist = movieList.get(position).getTitle();
+	        	String thumbnailurl = movieList.get(position).getThumbnailUrl();
+	        	int year = movieList.get(position).getYear();
+	        	double rating = movieList.get(position).getRating();
+	        	double latitude = movieList.get(position).getLatitude();
+	        	double longitude = movieList.get(position).getLongitude();
+	        	List<String> listgenre = movieList.get(position).getGenre();
+	        	
+
+	    		
+	    		intent.putExtra("Title",movielist);
+	    		intent.putExtra("URL",thumbnailurl);
+	    		intent.putExtra("Year",String.valueOf(year));
+	    		intent.putExtra("Rating",String.valueOf(rating));
+	    		intent.putExtra("Latitude",String.valueOf(latitude));
+	    		intent.putExtra("Latitude",latitude);
+	    		intent.putExtra("Longitude",String.valueOf(longitude));
+	    		intent.putExtra("Latitude",(longitude));
+	    		intent.putExtra("Genre",listgenre.toString());
 	        	startActivity(intent);
 	        	
 	        }
@@ -109,7 +134,9 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 								movie.setRating(((Number) obj.get("rating"))
 										.doubleValue());
 								movie.setYear(obj.getInt("releaseYear"));
-
+								movie.setLatitude(((Number) obj.get("latitude")).doubleValue());
+								movie.setLongitude(((Number) obj.get("longitude")).doubleValue());
+							
 								// Genre is json array
 								JSONArray genreArry = obj.getJSONArray("genre");
 								ArrayList<String> genre = new ArrayList<String>();

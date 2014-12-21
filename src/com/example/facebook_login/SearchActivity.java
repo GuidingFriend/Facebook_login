@@ -3,7 +3,11 @@ package com.example.facebook_login;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +22,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.example.facbook_login.placepicker.PickPlaceActivity;
-import com.example.facbook_login.placepicker.PlacePickerApplication;
-import com.example.facbook_login.placepicker.PlacePickerSampleActivity;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -29,14 +32,6 @@ import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
 import com.facebook.model.GraphLocation;
 import com.facebook.model.GraphPlace;
-
-
-
-
-
-
-
-
 
 
 //import edu.cmu.yahoo.travelog.DisplayPics.FetchBitmaps;
@@ -146,32 +141,15 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
 		
 		text_search = (EditText)findViewById(R.id.text_search);
+		String place = text_search.getText().toString();
 		text_nearby = (EditText)findViewById(R.id.text_nearby);
 //		access_token = (TextView)findViewById(R.id.access_token);
 		search_button = (ImageButton)findViewById(R.id.search_button);
 		nearby_button = (ImageButton)findViewById(R.id.gpsButton);
+	
+		testHttp();
 		
-		
-		HttpClient client = new DefaultHttpClient();
-	    HttpPost post = new HttpPost("https://posttestserver.com/post.php");
-	    try {
-	      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-	      nameValuePairs.add(new BasicNameValuePair("registrationid",
-	          "123456789"));
-	      
-	      post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	      Log.d("Post", post.toString());
-	      HttpResponse response = client.execute(post);
-	      BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-	      String line = "";
-	      while ((line = rd.readLine()) != null) {
-	        System.out.println(line);
-	      }
-
-	    } catch (Exception e) {
-	      e.printStackTrace();
-	    }
-	    
+    
 		search_button.setOnClickListener(this);
 		nearby_button.setOnClickListener(new OnClickListener() {
 
@@ -193,7 +171,51 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	}
 	
 	
-	@Override
+	private void testHttp() {
+		// TODO Auto-generated method stub
+		
+
+	    Thread thread = new Thread(new Runnable(){
+		    @Override
+		    public void run() {
+		    	HttpClient client = new DefaultHttpClient();
+			    HttpPost post = new HttpPost("https://posttestserver.com/post.php");
+	    try {
+	    	
+	      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+	      nameValuePairs.add(new BasicNameValuePair("Email", "youremail"));
+	      nameValuePairs
+	          .add(new BasicNameValuePair("Passwd", "yourpassword"));
+	      nameValuePairs.add(new BasicNameValuePair("accountType", "GOOGLE"));
+	      nameValuePairs.add(new BasicNameValuePair("source",
+	          "Google-cURL-Example"));
+	      nameValuePairs.add(new BasicNameValuePair("service", "ac2dm"));
+		    Log.d("JSON",nameValuePairs.toString());
+	      post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	      HttpResponse response = client.execute(post);
+	      BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+	      String line = "";
+	      while ((line = rd.readLine()) != null) {
+	        System.out.println(line);
+		    Log.d("Line",line);
+	        if (line.startsWith("Auth=")) {
+	          String key = line.substring(5);
+	          // do something with the key
+			    Log.d("key",key);
+	        }
+
+	      }
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	}
+	    });
+	    thread.start();
+	}
+
+
+		@Override
 	public void onLocationChanged(Location location) {
 	txtLat = (TextView) findViewById(R.id.text_nearby);
 	txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());

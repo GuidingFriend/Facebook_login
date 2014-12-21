@@ -1,14 +1,21 @@
 package com.example.facebook_login;
 
+import java.util.Locale;
+
+import com.example.facebook_login.model.Movie;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +28,9 @@ public class FlipPlacesActivity extends Activity{
 	public int currentimageindex=0;
 
   ImageView imageView;
+  Button openmap ;
+  double lat, longi;
+  
   private TextView dispData;
 	private int pics[]={R.drawable.antartica1, R.drawable.antartica2, R.drawable.antartica3,
 	        R.drawable.antartica4, R.drawable.antartica5,R.drawable.antartica6, R.drawable.antartica7,
@@ -34,10 +44,17 @@ public class FlipPlacesActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.places_listview);
         dispData = (TextView)findViewById(R.id.textView1);
+        
         Bundle bundle = getIntent().getExtras();
         Gallery ga = (Gallery)findViewById(R.id.Gallery01);
         ga.setAdapter(new ImageAdapter(this));
                
+        
+//        Intent i = getIntent();
+//        Movie movie = (Movie)getIntent().getExtras().getParcelable("latLong");
+//        Log.d("Movie", movie.toString());
+        
+        
         imageView = (ImageView)findViewById(R.id.ImageView01);
         ga.setOnItemClickListener(new OnItemClickListener() {
 
@@ -52,58 +69,38 @@ public class FlipPlacesActivity extends Activity{
             }
            
         });
+//        bundle.get("Title");
+        String title = bundle.getString("Title");
+        String thumbnailurl = bundle.getString("URL");
+        String year = bundle.getString("Year");
+        String rating = bundle.getString("Rating");
+        String latitude = bundle.getString("Latitude");
+        String longitude = bundle.getString("Longitude");
+        String genre = bundle.getString("Genre");
         
-
-        if(bundle.getString("GetData") != null){
-        	dispData.setText("Data : "+bundle.toString());
+        
+        dispData.setText("Title : "+title+"\n"+"Year"+year+"\n"+"Rating"+rating+"\n"+"Genre"+genre+"\n"+"Latitude"+latitude+"Longitude"+longitude);
+        lat=bundle.getDouble("Latitude");
+        longi=bundle.getDouble("Longitude");
+        final String uri = String.format("geo:%f,%f?z=%d&q=%f,%f (%s)",lat, longi, 15, lat, longi, title);
+        openmap = (Button) findViewById(R.id.openMap);
+        openmap.setOnClickListener(new View.OnClickListener()
+        {
+        public void onClick(View arg0){
+        Intent i = new
+        Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(i);
         }
+        });
         
-//        final Handler mHandler = new Handler();
-//
-//        // Create runnable for posting
-//        final Runnable mUpdateResults = new Runnable() {
-//            public void run() {
-//                
-//                AnimateandSlideShow();
-//                
-//            }
-//        };
-//        
-//        int delay = 100; // delay for 1 sec.
-//
-//        int period = 1500; // repeat every 4 sec.
-//
-//        Timer timer = new Timer();
-//
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//
-//        public void run() {
-//
-//             mHandler.post(mUpdateResults);
-//
+//        if(bundle.getString("Title") != null){
+//        	dispData.setText("Title : "+bundle.toString());
 //        }
-//
-//        }, delay, period);
         
-        
-               
-        
-        
-        
-        
-//        viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper1);
-//        setFlipperImage(gallery_grid_Images);
-//        iSwitcher = (ImageSwitcher) findViewById(R.id.imageSwitcher1);
-//        iSwitcher.setFactory(this);
-//        iSwitcher.setInAnimation(AnimationUtils.loadAnimation(this,
-//                    android.R.anim.fade_in));
-//        iSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this,
-//                    android.R.anim.fade_out));   
-//        
-//   
     }
 
 
+  
     
     public class ImageAdapter extends BaseAdapter {
 
@@ -223,6 +220,12 @@ public class FlipPlacesActivity extends Activity{
       
     }
 
+    public void openOnMap(){
+    	openmap = (Button)findViewById(R.id.openMap);
+    	String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f (%s)",40.6944, -73.9865, 10, 40.6944, 73.9865, "NYU Poly");
+    	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+    	getBaseContext().startActivity(intent);
+    }
 
 
 

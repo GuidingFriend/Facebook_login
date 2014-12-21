@@ -2,7 +2,7 @@ package com.example.facebook_login.model;
 
 import java.util.ArrayList;
 
-public class Movie{
+public class JsonFileObject{
 	private String title, thumbnailUrl;
 	private int year;
 	private double rating;
@@ -34,12 +34,12 @@ public class Movie{
 
 
 
-	public Movie() {
+	public JsonFileObject() {
 	}
 
 	
 	
-	public Movie(String name, String thumbnailUrl, int year, double rating, String latlong,
+	public JsonFileObject(String name, String thumbnailUrl, int year, double rating, String latlong,
 			ArrayList<String> genre) {
 		this.title = name;
 		this.thumbnailUrl = thumbnailUrl;
