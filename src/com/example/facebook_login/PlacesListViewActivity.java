@@ -107,7 +107,7 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	        	int checkins = movieList.get(position).getCheckins();
 	        	double latitude = movieList.get(position).getLatitude();
 	        	double longitude = movieList.get(position).getLongitude();
-	        	
+	        	String images = movieList.get(position).getImages();
 
 
 	    		
@@ -115,6 +115,7 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	    		intent.putExtra("Title",title);
 	    		intent.putExtra("Category",category);
 	    		intent.putExtra("Description",description);
+	    		intent.putExtra("Images",images);
 	    		intent.putExtra("Checkins",String.valueOf(checkins));
 //	    		intent.putExtra("Latitude",String.valueOf(latitude));
 	    		intent.putExtra("Latitude",latitude);
@@ -170,7 +171,7 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 								movie.setCheckins(obj.getInt("checkins"));
 								movie.setLatitude(((Number) obj.get("latitude")).doubleValue());
 								movie.setLongitude(((Number) obj.get("longitude")).doubleValue());
-							
+								movie.setImages(obj.getString("images"));
 								// Genre is json array
 //								JSONArray genreArry = obj.getJSONArray("genre");
 //								ArrayList<String> genre = new ArrayList<String>();

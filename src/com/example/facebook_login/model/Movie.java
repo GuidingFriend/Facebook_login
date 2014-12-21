@@ -2,19 +2,28 @@ package com.example.facebook_login.model;
 
 
 public class Movie{
-	private String title, thumbnailUrl, category, description;
+	private String title, thumbnailUrl, category, description, images;
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+
 	int checkins;
 	private double latitude, longitude;
 	
 	public Movie() {
 	}
 	
-	public Movie(String title, String thumbnailUrl, String category, String description, int checkins) {
+	public Movie(String title, String thumbnailUrl, String category, String description, String images, int checkins) {
 		this.title = title;
 		this.thumbnailUrl = thumbnailUrl;
 		this.category = category;
 		this.description = description;
 		this.checkins = checkins;
+		this.images = images;
 	}
 
 	

@@ -20,39 +20,20 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/fb_blue" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/text_search"
         android:layout_width="250dp"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:layout_below="@+id/textView1"
-        android:layout_marginTop="22dp"
-        android:layout_toLeftOf="@+id/search_button"
+        android:layout_weight="1"
         android:background="@color/white"
         android:ems="10"
         android:height="50dp"
-        android:hint="  Where to ?"
-        android:width="300dp" />
-
-    <ImageButton
-        android:id="@+id/search_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/abc_ic_search_api_holo_light" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="250dp"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/search_button"
-        android:layout_marginTop="37dp"
-        android:text="  Roaming Around ?"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/white" />
-
+        android:hint="Where do you want to go?"
+        android:textColor="@color/ThemeBlue"
+        android:textColorHint="@color/ThemeBlue"
+        android:width="340dp" />
+    
     <EditText
         android:id="@+id/text_nearby"
         android:layout_width="250dp"
@@ -61,18 +42,23 @@
         android:layout_centerVertical="true"
         android:background="@color/white"
         android:ems="10"
-        android:hint="Current Location" >
+        android:hint="Current Location"
+        android:visibility="gone" >
 
         <requestFocus />
     </EditText>
 
-    <ImageButton
-        android:id="@+id/gpsButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignTop="@+id/text_nearby"
-        android:layout_toRightOf="@+id/text_search"
-        android:src="@drawable/com_facebook_place_default_icon" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="250dp"
+        android:layout_height="35dp"
+        android:layout_alignLeft="@+id/text_search"
+        android:layout_below="@+id/search_button"
+        android:layout_marginTop="37dp"
+        android:text="  Find Places Around ?"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/white"
+        android:textSize="@dimen/roaming_around" />
 
     <Button
         android:id="@+id/about_me_button"
@@ -82,5 +68,22 @@
         android:layout_alignRight="@+id/textView1"
         android:text="About Me"
         android:textColor="@color/insta" />
+
+    <ImageButton
+        android:id="@+id/search_button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignLeft="@+id/gpsButton"
+        android:layout_alignTop="@+id/text_search"
+        android:src="@drawable/search" />
+
+    <ImageButton
+        android:id="@+id/gpsButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_toRightOf="@+id/textView2"
+        android:src="@drawable/nearby" />
 
 </RelativeLayout>

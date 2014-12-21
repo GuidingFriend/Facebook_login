@@ -33,15 +33,13 @@
         android:layout_below="@+id/textView2"
         android:layout_marginTop="16dp" />
 
-    <ImageView
-        android:id="@+id/ImageView01"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_above="@+id/openMap"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/Gallery01"
-        android:layout_margin="2dp"
-        android:gravity="top|center" />
+    <ViewFlipper
+            android:id="@+id/view_flipper"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="6dip" >
+    </ViewFlipper>
+    
 
     <ImageButton
         android:id="@+id/openMap"

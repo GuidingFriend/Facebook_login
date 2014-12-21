@@ -83,7 +83,7 @@ public class CustomListAdapter extends BaseAdapter {
 		genre.setText(String.valueOf(m.getDescription()));
 		
 		// release year
-		year.setText("Checkins: "+String.valueOf(m.getCheckins()));
+		year.setText(String.valueOf(m.getCheckins()) + "\nCheckins");
 
 		return convertView;
 	}

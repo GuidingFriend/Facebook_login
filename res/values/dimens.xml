@@ -10,5 +10,6 @@
     <dimen name="genre">13dip</dimen>
     <dimen name="year">12dip</dimen>
     <dimen name="welcome_text">30dp</dimen>
+    <dimen name="roaming_around">22dp</dimen>
 
 </resources>

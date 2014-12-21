@@ -41,6 +41,7 @@ import com.facebook.model.GraphPlace;
 
 
 
+
 //import edu.cmu.yahoo.travelog.DisplayPics.FetchBitmaps;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -59,6 +60,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -73,7 +75,8 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	String textlocation, gpslocation;
 	String filename;
 	Button about_me;
-	private EditText text_search, text_nearby;
+	private EditText text_nearby;
+	AutoCompleteTextView text_search;
 	private ImageButton search_button, nearby_button;
 	private TextView access_token;
 	private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
@@ -107,12 +110,14 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 		 
 //		txtLat = (TextView) findViewById(R.id.textView11);
 		
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
-		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 //		double longitude = location.getLongitude();
 //		double latitude = location.getLatitude();
 		
+		
+		/* working code
 		// getting GPS status
 		gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		// getting network status
@@ -126,9 +131,12 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 			locationManager.requestLocationUpdates(
 			LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES,
 			MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-			};
+			}
+			else{
+				Toast.makeText(this, "Not able to fetch current Location", Toast.LENGTH_LONG).show();
+			}
 			
-			
+			*/
 			
 			
 	
@@ -151,13 +159,21 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 //		txtLat = (TextView) findViewById(R.id.textView11);
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) this);
 		
+		location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		locationData = Double.toString(location.getLatitude()) + ","+Double.toString(location.getLongitude());
 		
 		about_me = (Button)findViewById(R.id.about_me_button);
 		
-		text_search = (EditText)findViewById(R.id.text_search);
+//		text_search = (EditText)findViewById(R.id.text_search);
+		text_search = (AutoCompleteTextView)findViewById(R.id.text_search);
+//		text_search.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item));
+
+//		text_search.setOnClickListener(this);
 		String place = text_search.getText().toString();
-		text_nearby = (EditText)findViewById(R.id.text_nearby);
+//		text_nearby = (EditText)findViewById(R.id.text_nearby);
 //		access_token = (TextView)findViewById(R.id.access_token);
 		search_button = (ImageButton)findViewById(R.id.search_button);
 		nearby_button = (ImageButton)findViewById(R.id.gpsButton);
@@ -171,7 +187,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 			@Override
 			public void onClick(View v) {
 				testHttp();
-				Intent i = new Intent(SearchActivity.this, MapActivity.class);
+				Intent i = new Intent(SearchActivity.this, PlacesListViewActivity.class);
 				startActivity(i);
 //                Toast.makeText(getBaseContext(),"Opening Map..",Toast.LENGTH_SHORT).show();
 //                onClickGPS();
@@ -201,6 +217,9 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 //		access_token.setText(access);
 	}
 	
+	
+	
+	
 	@Override
 	public void onLocationChanged(Location location) {
 	txtLat = (TextView) findViewById(R.id.text_nearby);
@@ -224,6 +243,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 //	      Log.d("GPSLocationData", locationData);
 	      gpslocation = locationData;
+//	      String gps = "'" + gpslocation + "'";
 //	      Log.d("GPSLocation", gpslocation);
 	      nameValuePairs.add(new BasicNameValuePair("gps_location", gpslocation));
 	      nameValuePairs.add(new BasicNameValuePair("access_token", fbaccesstoken));
@@ -232,7 +252,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	    	  nameValuePairs.add(new BasicNameValuePair("text_location", textlocation));
 	      	}
 			else{
-//				
+				
 //				textlocation = locationData.toString();
 //				nameValuePairs.add(new BasicNameValuePair("gps_location", textlocation));
 			}
