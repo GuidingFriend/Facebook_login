@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.example.facebook_login.model.Movie;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.content.Context;
@@ -72,33 +73,9 @@ public class FlipPlacesActivity extends Activity{
 //        viewFlipper = (ViewFlipper) findViewById(R.id.view_flipper);
         
         Bundle bundle = getIntent().getExtras();
-        Gallery ga = (Gallery)findViewById(R.id.Gallery01);
-        imageView = (ImageView)findViewById(R.id.ImageView01);
         titleView = (TextView)findViewById(R.id.textView2);
         category = (TextView)findViewById(R.id.textView3);
-//        ga.setAdapter(new ImageAdapter(this));
-               
-        
-//        Intent i = getIntent();
-//        Movie movie = (Movie)getIntent().getExtras().getParcelable("latLong");
-//        Log.d("Movie", movie.toString());
-        
-        
-        
-//        ga.setOnItemClickListener(new OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-//                    long arg3) {
-//                Toast.makeText(getBaseContext(), 
-//                        "You have selected picture " + (arg2+1) + " of Antartica", 
-//                        Toast.LENGTH_SHORT).show();
-//                imageView.setImageResource(pics[arg2]);
-////                imageView.setImageBitmap(pics[arg2]);
-//            }
-//           
-//        });
-//        bundle.get("Title");
+
         String title = bundle.getString("Title");
         String thumbnailurl = bundle.getString("URL");
         String year = bundle.getString("Category");
@@ -112,56 +89,21 @@ public class FlipPlacesActivity extends Activity{
         	
         	Log.d("Splitter", splitter.get(i).toString());
         }
-        Thread thread = new Thread(new Runnable(){
-		    @Override
-		    public void run() { 
-        URL newurl=null;
-		try {
-			newurl = new URL(splitter.get(0).toString());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-        Bitmap mIcon_val=null;
-		try {
-			mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        imageView.setImageBitmap(mIcon_val);
-		    }
-        });
-        thread.start();
-        
-//        Drawable d = LoadImageFromWebOperations(splitter.get(0).toString());
-//        imageView.setImageDrawable(d);
-//        
-//        for(int i=0;i<splitter.size();i++){
-//        	String imageurl = splitter.get(i);
-//        	URL url = new URL(imageurl);
-//        	HttpURLConnection connection  = (HttpURLConnection) url.openConnection();
-//
-//        	InputStream is = connection.getInputStream();
-//        	Bitmap img = BitmapFactory.decodeStream(is);  
-//        	imagearray.add(img);
-//        	imageView.setImageBitmap(img );
-//        	
-//        	
-//        }
-        
-//        for(int i=0;i<splitter.size();i++){
-//        	viewFlipper.addView(imagearray.get(i));
-//        }
-        
+        imageView = (ImageView)findViewById(R.id.ImageView01);
+        Picasso.with(getBaseContext()).load(splitter.get(0).toString()).into(imageView);
+        imageView = (ImageView)findViewById(R.id.ImageView02);
+        Picasso.with(getBaseContext()).load(splitter.get(1).toString()).into(imageView);
+        imageView = (ImageView)findViewById(R.id.ImageView03);
+        Picasso.with(getBaseContext()).load(splitter.get(2).toString()).into(imageView);
+        imageView = (ImageView)findViewById(R.id.ImageView04);
+        Picasso.with(getBaseContext()).load(splitter.get(3).toString()).into(imageView);
+
         lat=bundle.getDouble("Latitude");
         longi=bundle.getDouble("Longitude");
         titleView.setText(title);
         category.setText(year);
         
-        
-//        dispData.setText("Category"+year+"\n"+"Description"+genre+"\n"+"Checkins"+rating+"\n"+"Latitude"+lat+"Longitude"+longi);
-//        dispData.setText(genre);
+
         dispData.setMovementMethod(new ScrollingMovementMethod());
         dispData.setText(genre);
         final String uri = String.format("geo:%f,%f?z=%d&q=%f,%f (%s)",lat, longi, 15, lat, longi, title);
@@ -174,10 +116,7 @@ public class FlipPlacesActivity extends Activity{
         startActivity(i);
         }
         });
-        
-//        if(bundle.getString("Title") != null){
-//        	dispData.setText("Title : "+bundle.toString());
-//        }
+
         
     }
 
@@ -191,54 +130,6 @@ public class FlipPlacesActivity extends Activity{
         }
     }
 
-  
-   
-//    public boolean onTouchEvent(MotionEvent touchevent) 
-//    {
-//                 switch (touchevent.getAction())
-//                 {
-//                        // when user first touches the screen to swap
-//                         case MotionEvent.ACTION_DOWN: 
-//                         {
-//                             lastX = touchevent.getX();
-//                             break;
-//                        }
-//                         case MotionEvent.ACTION_UP: 
-//                         {
-//                             float currentX = touchevent.getX();
-//                             
-//                             // if left to right swipe on screen
-//                             if (lastX < currentX) 
-//                             {
-//                                  // If no more View/Child to flip
-////                                 if (viewFlipper.getDisplayedChild() == 0)
-////                                     break;
-//                                 
-//                                 // set the required Animation type to ViewFlipper
-//                                 // The Next screen will come in form Left and current Screen will go OUT from Right 
-//                                 viewFlipper.setInAnimation(this, R.anim.in_from_left);
-//                                 viewFlipper.setOutAnimation(this, R.anim.out_to_right);
-//                                 // Show the next Screen
-//                                 viewFlipper.showNext();
-//                             }
-//                             
-//                             // if right to left swipe on screen
-//                             if (lastX > currentX)
-//                             {
-////                                 if (viewFlipper.getDisplayedChild() == 1)
-////                                     break;
-//                                 // set the required Animation type to ViewFlipper
-//                                 // The Next screen will come in form Right and current Screen will go OUT from Left 
-//                                 viewFlipper.setInAnimation(this, R.anim.in_from_right);
-//                                 viewFlipper.setOutAnimation(this, R.anim.out_to_left);
-//                                 // Show The Previous Screen
-//                                 viewFlipper.showPrevious();
-//                             }
-//                             break;
-//                         }
-//                 }
-//                 return false;
-//    }
 
     
     public class ImageAdapter extends BaseAdapter {
@@ -311,13 +202,7 @@ public class FlipPlacesActivity extends Activity{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    
-//        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-//        if (Session.getActiveSession() != null || Session.getActiveSession().isOpened()){
-//                    Intent i = new Intent(FlipPlacesActivity.this,SearchActivity.class);
-//                    startActivity(i);
-//                }
-//       
+       
     }
 
     @Override
