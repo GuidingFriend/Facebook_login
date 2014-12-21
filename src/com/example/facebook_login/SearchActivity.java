@@ -24,7 +24,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import com.example.facebook_login.facebook_profile.FbMainActivity;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -32,6 +34,11 @@ import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
 import com.facebook.model.GraphLocation;
 import com.facebook.model.GraphPlace;
+
+
+
+
+
 
 
 //import edu.cmu.yahoo.travelog.DisplayPics.FetchBitmaps;
@@ -52,6 +59,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -60,7 +68,11 @@ import android.widget.AdapterView.OnItemClickListener;
 
 
 public class SearchActivity extends ActionBarActivity implements OnClickListener, LocationListener{
-	    
+	 
+	private UiLifecycleHelper uiHelper;
+	String textlocation, gpslocation;
+	String filename;
+	Button about_me;
 	private EditText text_search, text_nearby;
 	private ImageButton search_button, nearby_button;
 	private TextView access_token;
@@ -93,7 +105,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 		
 	
 		 
-		txtLat = (TextView) findViewById(R.id.textView11);
+//		txtLat = (TextView) findViewById(R.id.textView11);
 		
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
@@ -131,14 +143,17 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 //			fbaccesstoken = session.getAccessToken(); 
 		    if (session.isOpened()) {
 		    	fbaccesstoken = session.getAccessToken();
-		        Toast.makeText(this, session.getAccessToken(), Toast.LENGTH_LONG).show();
+		        //Toast.makeText(this, session.getAccessToken(), Toast.LENGTH_LONG).show();
 		        Log.d("Access Token", session.getAccessToken());
 		    }
 			
 			//working code
-		txtLat = (TextView) findViewById(R.id.textView11);
+//		txtLat = (TextView) findViewById(R.id.textView11);
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
+		
+		
+		about_me = (Button)findViewById(R.id.about_me_button);
 		
 		text_search = (EditText)findViewById(R.id.text_search);
 		String place = text_search.getText().toString();
@@ -147,7 +162,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 		search_button = (ImageButton)findViewById(R.id.search_button);
 		nearby_button = (ImageButton)findViewById(R.id.gpsButton);
 	
-		testHttp();
+		
 		
     
 		search_button.setOnClickListener(this);
@@ -155,7 +170,22 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 
 			@Override
 			public void onClick(View v) {
+				testHttp();
 				Intent i = new Intent(SearchActivity.this, MapActivity.class);
+				startActivity(i);
+//                Toast.makeText(getBaseContext(),"Opening Map..",Toast.LENGTH_SHORT).show();
+//                onClickGPS();
+               
+            }
+           
+        });
+		
+		about_me.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+//				testHttp();
+				Intent i = new Intent(SearchActivity.this, FbMainActivity.class);
 				startActivity(i);
                 Toast.makeText(getBaseContext(),"Opening Map..",Toast.LENGTH_SHORT).show();
 //                onClickGPS();
@@ -163,6 +193,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
             }
            
         });
+
 		
 		//		Intent intent = getIntent();
 //		Bundle newbundle = intent.getExtras();
@@ -170,6 +201,14 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 //		access_token.setText(access);
 	}
 	
+	@Override
+	public void onLocationChanged(Location location) {
+	txtLat = (TextView) findViewById(R.id.text_nearby);
+	txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
+//	locationData = String.valueOf(location.getLatitude()) + ","+String.valueOf(location.getLongitude());
+	locationData = Double.toString(location.getLatitude()) + ","+Double.toString(location.getLongitude());
+//	Log.d("Location Data", locationData);
+	}
 	
 	private void testHttp() {
 		// TODO Auto-generated method stub
@@ -179,32 +218,43 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 		    @Override
 		    public void run() {
 		    	HttpClient client = new DefaultHttpClient();
-			    HttpPost post = new HttpPost("https://posttestserver.com/post.php");
+			    HttpPost post = new HttpPost("http://ec2-54-164-195-102.compute-1.amazonaws.com/api_places/");
 	    try {
 	    	
 	      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-	      nameValuePairs.add(new BasicNameValuePair("Email", "youremail"));
-	      nameValuePairs
-	          .add(new BasicNameValuePair("Passwd", "yourpassword"));
-	      nameValuePairs.add(new BasicNameValuePair("accountType", "GOOGLE"));
-	      nameValuePairs.add(new BasicNameValuePair("source",
-	          "Google-cURL-Example"));
-	      nameValuePairs.add(new BasicNameValuePair("service", "ac2dm"));
+//	      Log.d("GPSLocationData", locationData);
+	      gpslocation = locationData;
+//	      Log.d("GPSLocation", gpslocation);
+	      nameValuePairs.add(new BasicNameValuePair("gps_location", gpslocation));
+	      nameValuePairs.add(new BasicNameValuePair("access_token", fbaccesstoken));
+	      if(text_search.getText().toString()!=null){
+	    	  textlocation = text_search.getText().toString();
+	    	  nameValuePairs.add(new BasicNameValuePair("text_location", textlocation));
+	      	}
+			else{
+//				
+//				textlocation = locationData.toString();
+//				nameValuePairs.add(new BasicNameValuePair("gps_location", textlocation));
+			}
+	      
 		    Log.d("JSON",nameValuePairs.toString());
 	      post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	      HttpResponse response = client.execute(post);
+	      Log.d("Response",response.toString());
 	      BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
 	      String line = "";
 	      while ((line = rd.readLine()) != null) {
 	        System.out.println(line);
 		    Log.d("Line",line);
-	        if (line.startsWith("Auth=")) {
-	          String key = line.substring(5);
-	          // do something with the key
-			    Log.d("key",key);
-	        }
-
+		    try {
+		        JSONObject json= (JSONObject) new JSONTokener(line).nextValue();
+//		        JSONObject json2 = json.getJSONObject("filename");
+		        filename = (String) json.get("filename");
+		        Log.d("Test",filename);
+		    } catch (JSONException e) {
+		        e.printStackTrace();
+		    }
 	      }
 	    } catch (IOException e) {
 	      e.printStackTrace();
@@ -212,16 +262,16 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	}
 	    });
 	    thread.start();
+	    try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
-		@Override
-	public void onLocationChanged(Location location) {
-	txtLat = (TextView) findViewById(R.id.text_nearby);
-	txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
-	locationData = txtLat.toString();
-//	Log.d("Location Data", locationData);
-	}
+	
 
 	@Override
 	public void onProviderDisabled(String provider) {
@@ -310,8 +360,18 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
     }
     
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-      
+//        super.onActivityResult(requestCode, resultCode, data);
+//        @Override
+//        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            uiHelper.onActivityResult(requestCode, resultCode, data);
+            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+            if (Session.getActiveSession() != null || Session.getActiveSession().isOpened()){
+                        Intent i = new Intent(SearchActivity.this,SearchActivity.class);
+                        startActivity(i);
+                    }
+           
+        
     }
     
       
@@ -321,17 +381,19 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 		
 //			HttpClient httpclient = new DefaultHttpClient();
 //		    HttpPost httppost = new HttpPost("https://posttestserver.com/post.php?location="+text_search.getText());
-		    
+			testHttp();
 		    Intent intent = new Intent(SearchActivity.this, PlacesListViewActivity.class);
-			intent.putExtra("Location",locationData);
-			if(text_search.toString()!=null){
-				intent.putExtra("Location", text_search.getText().toString());
-				intent.putExtra("AccessToken",fbaccesstoken);
-			}
-			else{
-				intent.putExtra("Location",locationData);
-			intent.putExtra("AccessToken",fbaccesstoken);
-			}
+//			intent.putExtra("Location",locationData);
+			intent.putExtra("Filename",filename);
+			
+//			if(text_search.toString()!=null){
+//				intent.putExtra("Location", text_search.getText().toString());
+//				intent.putExtra("AccessToken",fbaccesstoken);
+//			}
+//			else{
+//				intent.putExtra("Filename",filename);
+//			intent.putExtra("AccessToken",fbaccesstoken);
+//			}
 			startActivity(intent);
 
 //			HttpClient client = new DefaultHttpClient();

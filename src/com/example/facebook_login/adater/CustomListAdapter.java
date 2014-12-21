@@ -54,8 +54,7 @@ public class CustomListAdapter extends BaseAdapter {
 
 		if (imageLoader == null)
 			imageLoader = AppController.getInstance().getImageLoader();
-		NetworkImageView thumbNail = (NetworkImageView) convertView
-				.findViewById(R.id.thumbnail);
+		NetworkImageView thumbNail = (NetworkImageView) convertView.findViewById(R.id.thumbnail);
 		TextView title = (TextView) convertView.findViewById(R.id.title);
 		TextView rating = (TextView) convertView.findViewById(R.id.rating);
 		TextView genre = (TextView) convertView.findViewById(R.id.genre);
@@ -71,19 +70,20 @@ public class CustomListAdapter extends BaseAdapter {
 		title.setText(m.getTitle());
 		
 		// rating
-		rating.setText("Rating: " + String.valueOf(m.getRating()));
+		rating.setText("Category: " + String.valueOf(m.getCategory()));
 		
 		// genre
-		String genreStr = "";
-		for (String str : m.getGenre()) {
-			genreStr += str + ", ";
-		}
-		genreStr = genreStr.length() > 0 ? genreStr.substring(0,
-				genreStr.length() - 2) : genreStr;
-		genre.setText(genreStr);
+//		String genreStr = "";
+//		for (String str : m.getGenre()) {
+//			genreStr += str + ", ";
+//		}
+//		genreStr = genreStr.length() > 0 ? genreStr.substring(0,
+//				genreStr.length() - 2) : genreStr;
+//		genre.setText(genreStr);
+		genre.setText(String.valueOf(m.getDescription()));
 		
 		// release year
-		year.setText(String.valueOf(m.getYear()));
+		year.setText("Checkins: "+String.valueOf(m.getCheckins()));
 
 		return convertView;
 	}

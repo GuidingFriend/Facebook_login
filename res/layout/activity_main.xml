@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,19 +9,11 @@
     android:padding="20dp" >
 
     <TextView
-        android:id="@+id/welcome_to_guidingfriend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Welcome to Guiding Friend!"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/insta" />
-
-    <TextView
         android:id="@+id/user_name"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/welcome_to_guidingfriend"
+        android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         android:textSize="18sp" />
 
@@ -29,8 +21,35 @@
         android:id="@+id/fb_login_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_alignLeft="@+id/enter_app_button"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="47dp"
         facebook:confirm_logout="false"
         facebook:fetch_user_info="true" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/enter_app_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fb_login_button"
+        android:layout_alignLeft="@+id/welcome_to_guidingfriend"
+        android:layout_marginBottom="29dp"
+        android:background="@color/fb_blue"
+        android:text="Enter"
+        android:textColor="@color/white"
+        android:textColorLink="@color/white" />
+
+    <TextView
+        android:id="@+id/welcome_to_guidingfriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:gravity="center"
+        android:text="Welcome to Guiding Friend!"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/insta"
+        android:textSize="@dimen/welcome_text" />
+
+</RelativeLayout>

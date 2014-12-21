@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -32,8 +33,10 @@ import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 
 
+
 public class MainActivity extends FragmentActivity implements Serializable{
 
+	public static String userid;
 	private LoginButton loginBtn;
     private Button twitter_login_button;
     private Button instagram_login_button;
@@ -44,6 +47,9 @@ public class MainActivity extends FragmentActivity implements Serializable{
     
     private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
 
+    Button enter_app_button;
+    
+    
     private static String APP_ID = "748523695187267";
     private ProgressDialog progress;
     private Facebook facebook;
@@ -68,9 +74,9 @@ public class MainActivity extends FragmentActivity implements Serializable{
         uiHelper.onCreate(savedInstanceState);
         facebook = new Facebook(APP_ID);
         mAsyncRunner = new AsyncFacebookRunner(facebook);
-        access_token = (TextView) findViewById(R.id.access_token);
+//        access_token = (TextView) findViewById(R.id.access_token);
         userName = (TextView) findViewById(R.id.user_name);
-
+        enter_app_button = (Button) findViewById(R.id.enter_app_button);
 
         
 //        user_access = facebook.getAuthResponse();
@@ -85,13 +91,17 @@ public class MainActivity extends FragmentActivity implements Serializable{
             @Override
             public void onUserInfoFetched(GraphUser user) {
                 if (user != null) {
-                    userName.setText("Hello, " + user.getName());
+                    userName.setText("              " + user.getName());
+                    userid = user.getId();
+                    Log.d("URLMain",userid);
                 } else {
                     userName.setText("You are not logged");
+                    enter_app_button.setVisibility(View.GONE);
                 }
 //                user.
             }
         });
+        
 
    
     }
@@ -138,15 +148,29 @@ public class MainActivity extends FragmentActivity implements Serializable{
 
     @Override
     public void onResume() {
+    	
         super.onResume();
         uiHelper.onResume();
-        Session session = Session.getActiveSession();
-        
-        if (session.isOpened()) {
-        	Intent i = new Intent(MainActivity.this,SearchActivity.class);
+        enter_app_button = (Button) findViewById(R.id.enter_app_button);
+        //Session session = Session.getActiveSession();
+        if (Session.getActiveSession() != null || Session.getActiveSession().isOpened()){
+        	enter_app_button.setVisibility(View.VISIBLE);
+        	enter_app_button.setOnClickListener(new View.OnClickListener()
+            {
+            public void onClick(View arg0){
+            Intent i = new Intent(MainActivity.this,SearchActivity.class);
             startActivity(i);
+            }
+//        	enter_app_button.setonClickListener
+//                    Intent i = new Intent(MainActivity.this,SearchActivity.class);
+//                    startActivity(i);
+               });
         }
-        
+        else{
+        	
+    		enter_app_button.setVisibility(View.GONE);
+        }
+       
     }
 
     @Override
@@ -165,11 +189,25 @@ public class MainActivity extends FragmentActivity implements Serializable{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
+        enter_app_button = (Button) findViewById(R.id.enter_app_button);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         if (Session.getActiveSession() != null || Session.getActiveSession().isOpened()){
-                    Intent i = new Intent(MainActivity.this,SearchActivity.class);
-                    startActivity(i);
-                }
+        	enter_app_button.setVisibility(View.VISIBLE);
+        	enter_app_button.setOnClickListener(new View.OnClickListener()
+            {
+            public void onClick(View arg0){
+            Intent i = new Intent(MainActivity.this,SearchActivity.class);
+            startActivity(i);
+            }
+//        	enter_app_button.setonClickListener
+//                    Intent i = new Intent(MainActivity.this,SearchActivity.class);
+//                    startActivity(i);
+               });
+        }
+        else{
+        	
+    		enter_app_button.setVisibility(View.GONE);
+        }
        
     }
 

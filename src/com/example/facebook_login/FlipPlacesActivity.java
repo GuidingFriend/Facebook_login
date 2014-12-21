@@ -72,15 +72,15 @@ public class FlipPlacesActivity extends Activity{
 //        bundle.get("Title");
         String title = bundle.getString("Title");
         String thumbnailurl = bundle.getString("URL");
-        String year = bundle.getString("Year");
-        String rating = bundle.getString("Rating");
-        String genre = bundle.getString("Genre");
+        String year = bundle.getString("Category");
+        String rating = bundle.getString("Checkins");
+        String genre = bundle.getString("Description");
         
         
         
         lat=bundle.getDouble("Latitude");
         longi=bundle.getDouble("Longitude");
-        dispData.setText("Title : "+title+"\n"+"Year"+year+"\n"+"Rating"+rating+"\n"+"Genre"+genre+"\n"+"Latitude"+lat+"Longitude"+longi);
+        dispData.setText(title+"\n"+"Category"+year+"\n"+"Description"+genre+"\n"+"Checkins"+rating+"\n"+"Latitude"+lat+"Longitude"+longi);
         final String uri = String.format("geo:%f,%f?z=%d&q=%f,%f (%s)",lat, longi, 15, lat, longi, title);
         openmap = (Button) findViewById(R.id.openMap);
         openmap.setOnClickListener(new View.OnClickListener()
@@ -148,39 +148,6 @@ public class FlipPlacesActivity extends Activity{
         finish();
         android.os.Process.killProcess(android.os.Process.myPid());
       }
-    
-    /**
-     * Helper method to start the animation on the splash screen
-     */
-//    private void AnimateandSlideShow() {
-//        
-//        
-//        slidingimage = (ImageView)findViewById(R.id.ImageView3_Left);
-//           slidingimage.setImageResource(gallery_grid_Images[currentimageindex%gallery_grid_Images.length]);
-//           
-//           currentimageindex++;
-//        
-//           Animation rotateimage = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-//          
-//        
-//          slidingimage.startAnimation(rotateimage);
-//          
-//              
-//        
-//    }    
-    
-    
-
-
-
-//    private void setFlipperImage(int res) {
-//        Log.i("Set Filpper Called", res+"");
-//        ImageView image = new ImageView(getApplicationContext());
-//        image.setBackgroundResource(res);
-//        viewFlipper.addView(image);
-//    }
-    
-     
     
     @Override
     public void onResume() {

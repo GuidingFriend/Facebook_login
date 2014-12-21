@@ -26,8 +26,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-//import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.facebook_login.JsonArrayRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
+//import com.example.facebook_login.JsonArrayRequest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,10 +38,11 @@ import android.view.View;
 public class PlacesListViewActivity extends Activity implements OnItemClickListener{
 	private static final String TAG = PlacesListViewActivity.class.getSimpleName();
 	static String location="";
+	static String filename ="";
 	static String fbaccesstoken="";
 	// Movies json url
 //	private static final String url = "http://api.androidhive.info/json/movies.json";
-	private static String url = "http://ec2-54-164-195-102.compute-1.amazonaws.com/api_places/?location="+location+"&access_token="+fbaccesstoken;
+	private static String url = "http://ec2-54-164-195-102.compute-1.amazonaws.com/static/"+filename+".json";
 	private ProgressDialog pDialog;
 	private List<Movie> movieList = new ArrayList<Movie>();
 	private ListView listView;
@@ -59,12 +60,13 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_places_list_view);
 		Bundle bundle = getIntent().getExtras();
-		fbaccesstoken = bundle.getString("AccessToken");
-		location = bundle.getString("Location");
+		filename = bundle.getString("Filename");
+//		fbaccesstoken = bundle.getString("AccessToken");
+//		location = bundle.getString("Location");
 		Log.d("AccessToken",fbaccesstoken);
 		Log.d("Location",location);
 		
-		url = "http://ec2-54-164-195-102.compute-1.amazonaws.com/api_places/?location="+location+"&access_token="+fbaccesstoken;
+		url = "http://ec2-54-164-195-102.compute-1.amazonaws.com/static/"+filename+".json";
 		Log.d("URL",url);
 		listView = (ListView) findViewById(R.id.list);
 		adapter = new CustomListAdapter(this, movieList);
@@ -87,26 +89,38 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 //	        	intent.putExtra("GetData",getData);
 //	        	intent.putExtra("Latlong",movie);
 	        	
-	        	String movielist = movieList.get(position).getTitle();
+//	        	String movielist = movieList.get(position).getTitle();
+//	        	
+//	        	
+//	        	
+//	        	String thumbnailurl = movieList.get(position).getThumbnailUrl();
+//	        	int year = movieList.get(position).getYear();
+//	        	double rating = movieList.get(position).getRating();
+//	        	double latitude = movieList.get(position).getLatitude();
+//	        	double longitude = movieList.get(position).getLongitude();
+//	        	List<String> listgenre = movieList.get(position).getGenre();
+	        	
 	        	String thumbnailurl = movieList.get(position).getThumbnailUrl();
-	        	int year = movieList.get(position).getYear();
-	        	double rating = movieList.get(position).getRating();
+	        	String title = movieList.get(position).getTitle();
+	        	String category = movieList.get(position).getCategory();
+	        	String description = movieList.get(position).getDescription();
+	        	int checkins = movieList.get(position).getCheckins();
 	        	double latitude = movieList.get(position).getLatitude();
 	        	double longitude = movieList.get(position).getLongitude();
-	        	List<String> listgenre = movieList.get(position).getGenre();
 	        	
 
+
 	    		
-	    		intent.putExtra("Title",movielist);
 	    		intent.putExtra("URL",thumbnailurl);
-	    		intent.putExtra("Year",String.valueOf(year));
-	    		intent.putExtra("Rating",String.valueOf(rating));
+	    		intent.putExtra("Title",title);
+	    		intent.putExtra("Category",category);
+	    		intent.putExtra("Description",description);
+	    		intent.putExtra("Checkins",String.valueOf(checkins));
 //	    		intent.putExtra("Latitude",String.valueOf(latitude));
 	    		intent.putExtra("Latitude",latitude);
 //	    		intent.putExtra("Longitude",String.valueOf(longitude));
 	    		intent.putExtra("Longitude",(longitude));
-	    		intent.putExtra("Genre",listgenre.toString());
-	        	startActivity(intent);
+	    		startActivity(intent);
 	        	
 	        }
 	       
@@ -138,30 +152,44 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 
 								JSONObject obj = response.getJSONObject(i);
 								Movie movie = new Movie();
-								movie.setTitle(obj.getString("title"));
+								if(obj.getString("title").equals("Kota Batam")){
+									
+								
+								}
+								else{
+									if(obj.getString("description").equals("")){
+										movie.setDescription("");
+									}
+									else{
+										movie.setDescription(obj.getString("description"));
+									}
 								movie.setThumbnailUrl(obj.getString("image"));
-								movie.setRating(((Number) obj.get("rating")).doubleValue());
-								movie.setYear(obj.getInt("releaseYear"));
+								movie.setTitle(obj.getString("title"));
+								movie.setCategory(obj.getString("category"));
+								
+								movie.setCheckins(obj.getInt("checkins"));
 								movie.setLatitude(((Number) obj.get("latitude")).doubleValue());
 								movie.setLongitude(((Number) obj.get("longitude")).doubleValue());
 							
 								// Genre is json array
-								JSONArray genreArry = obj.getJSONArray("genre");
-								ArrayList<String> genre = new ArrayList<String>();
-								for (int j = 0; j < genreArry.length(); j++) {
-									genre.add((String) genreArry.get(j));
-								}
-								movie.setGenre(genre);
+//								JSONArray genreArry = obj.getJSONArray("genre");
+//								ArrayList<String> genre = new ArrayList<String>();
+//								for (int j = 0; j < genreArry.length(); j++) {
+//									genre.add((String) genreArry.get(j));
+//								}
+//								movie.setGenre(genre);
 
 								// adding movie to movies array
 								movieList.add(movie);
-
+								}	
 							} catch (JSONException e) {
 								e.printStackTrace();
 							}
+							
 
 						}
-
+											
+						
 						// notifying list adapter about data changes
 						// so that it renders the list view with updated data
 						adapter.notifyDataSetChanged();

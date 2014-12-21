@@ -1,13 +1,67 @@
 package com.example.facebook_login.model;
 
-import java.util.ArrayList;
 
 public class Movie{
-	private String title, thumbnailUrl;
-	private int year;
-	private double rating;
-	private ArrayList<String> genre;
+	private String title, thumbnailUrl, category, description;
+	int checkins;
 	private double latitude, longitude;
+	
+	public Movie() {
+	}
+	
+	public Movie(String title, String thumbnailUrl, String category, String description, int checkins) {
+		this.title = title;
+		this.thumbnailUrl = thumbnailUrl;
+		this.category = category;
+		this.description = description;
+		this.checkins = checkins;
+	}
+
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	
+	public String getCategory() {
+		return category;
+	}
+
+
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+
+	public int getCheckins() {
+		return checkins;
+	}
+
+
+
+	public void setCheckins(int checkins) {
+		this.checkins = checkins;
+	}
+
+	
 	
 
 	public double getLatitude() {
@@ -33,31 +87,6 @@ public class Movie{
 	}
 
 
-
-	public Movie() {
-	}
-
-	
-	
-	public Movie(String name, String thumbnailUrl, int year, double rating, String latlong,
-			ArrayList<String> genre) {
-		this.title = name;
-		this.thumbnailUrl = thumbnailUrl;
-		this.year = year;
-		this.rating = rating;
-		this.genre = genre;
-	}
-
-	   
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String name) {
-		this.title = name;
-	}
-	
-	
 	public String getThumbnailUrl() {
 		return thumbnailUrl;
 	}
@@ -66,30 +95,8 @@ public class Movie{
 		this.thumbnailUrl = thumbnailUrl;
 	}
 
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public double getRating() {
-		return rating;
-	}
-
-	public void setRating(double rating) {
-		this.rating = rating;
-	}
-
-	public ArrayList<String> getGenre() {
-		return genre;
-	}
-
-	public void setGenre(ArrayList<String> genre) {
-		this.genre = genre;
-	}
-
+	
+	
 
 	
 

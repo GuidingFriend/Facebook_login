@@ -9,26 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.guidingfriend.SearchActivity" >
 
-    <Button
-        android:id="@+id/about_me_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/insta"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="94dp"
-        android:text="About Me" />
-
-    <TextView
-        android:id="@+id/access_token"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/about_me_button"
-        android:layout_alignRight="@+id/about_me_button"
-        android:layout_marginBottom="20dp"
-        android:hint="Access Token"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
@@ -54,14 +34,6 @@
         android:width="300dp" />
 
     <ImageButton
-        android:id="@+id/gpsButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_above="@+id/access_token"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/com_facebook_place_default_icon" />
-
-    <ImageButton
         android:id="@+id/search_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -70,35 +42,45 @@
         android:layout_marginTop="15dp"
         android:src="@drawable/abc_ic_search_api_holo_light" />
 
-    <EditText
-        android:id="@+id/text_nearby"
-        android:layout_width="250dp"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/gpsButton"
-        android:background="@color/white"
-        android:ems="10"
-        android:hint="Current Location" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="250dp"
         android:layout_height="30dp"
-        android:layout_above="@+id/text_nearby"
-        android:layout_alignLeft="@+id/text_nearby"
-        android:layout_marginBottom="17dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/search_button"
+        android:layout_marginTop="37dp"
         android:text="  Roaming Around ?"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white" />
 
-    <TextView
-        android:id="@+id/textView11"
+    <EditText
+        android:id="@+id/text_nearby"
+        android:layout_width="250dp"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_centerVertical="true"
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="Current Location" >
+
+        <requestFocus />
+    </EditText>
+
+    <ImageButton
+        android:id="@+id/gpsButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/text_nearby"
+        android:layout_toRightOf="@+id/text_search"
+        android:src="@drawable/com_facebook_place_default_icon" />
+
+    <Button
+        android:id="@+id/about_me_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/access_token"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="14dp"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_alignRight="@+id/textView1"
+        android:text="About Me"
+        android:textColor="@color/insta" />
 
 </RelativeLayout>
