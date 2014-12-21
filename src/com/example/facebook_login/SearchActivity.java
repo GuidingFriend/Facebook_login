@@ -325,7 +325,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 		    Intent intent = new Intent(SearchActivity.this, PlacesListViewActivity.class);
 			intent.putExtra("Location",locationData);
 			if(text_search.toString()!=null){
-				intent.putExtra("Location", text_search.toString());
+				intent.putExtra("Location", text_search.getText().toString());
 				intent.putExtra("AccessToken",fbaccesstoken);
 			}
 			else{

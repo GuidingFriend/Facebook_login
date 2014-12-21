@@ -26,8 +26,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-
+//import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.facebook_login.JsonArrayRequest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -122,7 +122,7 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 		// changing action bar color
 		getActionBar().setBackgroundDrawable(
 				new ColorDrawable(Color.parseColor("#1b1b1b")));
-
+		
 		// Creating volley request obj
 		JsonArrayRequest movieReq = new JsonArrayRequest(url,
 				new Response.Listener<JSONArray>() {
@@ -207,3 +207,4 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	}
 
 }
+
