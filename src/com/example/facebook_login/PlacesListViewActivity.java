@@ -37,10 +37,11 @@ import android.view.View;
 
 public class PlacesListViewActivity extends Activity implements OnItemClickListener{
 	private static final String TAG = PlacesListViewActivity.class.getSimpleName();
-
+	static String location="";
+	static String fbaccesstoken="";
 	// Movies json url
 //	private static final String url = "http://api.androidhive.info/json/movies.json";
-	private static final String url = "http://arhamweb.com/movies.json";
+	private static String url = "http://ec2-54-164-195-102.compute-1.amazonaws.com/api_places/?location="+location+"&access_token="+fbaccesstoken;
 	private ProgressDialog pDialog;
 	private List<Movie> movieList = new ArrayList<Movie>();
 	private ListView listView;
@@ -57,7 +58,14 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_places_list_view);
+		Bundle bundle = getIntent().getExtras();
+		fbaccesstoken = bundle.getString("AccessToken");
+		location = bundle.getString("Location");
+		Log.d("AccessToken",fbaccesstoken);
+		Log.d("Location",location);
 		
+		url = "http://ec2-54-164-195-102.compute-1.amazonaws.com/api_places/?location="+location+"&access_token="+fbaccesstoken;
+		Log.d("URL",url);
 		listView = (ListView) findViewById(R.id.list);
 		adapter = new CustomListAdapter(this, movieList);
 		listView.setAdapter(adapter);
@@ -93,10 +101,10 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	    		intent.putExtra("URL",thumbnailurl);
 	    		intent.putExtra("Year",String.valueOf(year));
 	    		intent.putExtra("Rating",String.valueOf(rating));
-	    		intent.putExtra("Latitude",String.valueOf(latitude));
+//	    		intent.putExtra("Latitude",String.valueOf(latitude));
 	    		intent.putExtra("Latitude",latitude);
-	    		intent.putExtra("Longitude",String.valueOf(longitude));
-	    		intent.putExtra("Latitude",(longitude));
+//	    		intent.putExtra("Longitude",String.valueOf(longitude));
+	    		intent.putExtra("Longitude",(longitude));
 	    		intent.putExtra("Genre",listgenre.toString());
 	        	startActivity(intent);
 	        	
@@ -118,6 +126,7 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 		// Creating volley request obj
 		JsonArrayRequest movieReq = new JsonArrayRequest(url,
 				new Response.Listener<JSONArray>() {
+					
 					@Override
 					public void onResponse(JSONArray response) {
 //						Log.d(TAG, response.toString());
@@ -131,8 +140,7 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 								Movie movie = new Movie();
 								movie.setTitle(obj.getString("title"));
 								movie.setThumbnailUrl(obj.getString("image"));
-								movie.setRating(((Number) obj.get("rating"))
-										.doubleValue());
+								movie.setRating(((Number) obj.get("rating")).doubleValue());
 								movie.setYear(obj.getInt("releaseYear"));
 								movie.setLatitude(((Number) obj.get("latitude")).doubleValue());
 								movie.setLongitude(((Number) obj.get("longitude")).doubleValue());

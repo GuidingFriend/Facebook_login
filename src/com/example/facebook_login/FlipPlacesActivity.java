@@ -74,14 +74,13 @@ public class FlipPlacesActivity extends Activity{
         String thumbnailurl = bundle.getString("URL");
         String year = bundle.getString("Year");
         String rating = bundle.getString("Rating");
-        String latitude = bundle.getString("Latitude");
-        String longitude = bundle.getString("Longitude");
         String genre = bundle.getString("Genre");
         
         
-        dispData.setText("Title : "+title+"\n"+"Year"+year+"\n"+"Rating"+rating+"\n"+"Genre"+genre+"\n"+"Latitude"+latitude+"Longitude"+longitude);
+        
         lat=bundle.getDouble("Latitude");
         longi=bundle.getDouble("Longitude");
+        dispData.setText("Title : "+title+"\n"+"Year"+year+"\n"+"Rating"+rating+"\n"+"Genre"+genre+"\n"+"Latitude"+lat+"Longitude"+longi);
         final String uri = String.format("geo:%f,%f?z=%d&q=%f,%f (%s)",lat, longi, 15, lat, longi, title);
         openmap = (Button) findViewById(R.id.openMap);
         openmap.setOnClickListener(new View.OnClickListener()

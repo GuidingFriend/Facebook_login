@@ -220,7 +220,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 	txtLat = (TextView) findViewById(R.id.text_nearby);
 	txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
 	locationData = txtLat.toString();
-	
+//	Log.d("Location Data", locationData);
 	}
 
 	@Override
@@ -324,6 +324,14 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 		    
 		    Intent intent = new Intent(SearchActivity.this, PlacesListViewActivity.class);
 			intent.putExtra("Location",locationData);
+			if(text_search.toString()!=null){
+				intent.putExtra("Location", text_search.toString());
+				intent.putExtra("AccessToken",fbaccesstoken);
+			}
+			else{
+				intent.putExtra("Location",locationData);
+			intent.putExtra("AccessToken",fbaccesstoken);
+			}
 			startActivity(intent);
 
 //			HttpClient client = new DefaultHttpClient();
