@@ -37,7 +37,7 @@
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
         android:layout_weight="0.46"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_empty" />
 
     <TextView
         android:id="@+id/link"

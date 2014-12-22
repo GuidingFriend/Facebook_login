@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.example.facebook_login.gallery;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -38,18 +39,21 @@ import com.example.facebook_login.R;
 /**
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  */
+@SuppressLint("NewApi")
 public class ImagePagerFragment extends BaseFragment {
 
 	public static final int INDEX = 2;
 
-	String[] imageUrls = Constants.IMAGES;
-
+//	String[] imageUrls = Constants.IMAGES;
+	String imageurl;
 	DisplayImageOptions options;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Bundle bundle = this.getArguments();
+		imageurl=bundle.getString("SelectedURL");
+		
 		options = new DisplayImageOptions.Builder()
 				.showImageForEmptyUri(R.drawable.ic_empty)
 				.showImageOnFail(R.drawable.ic_error)
@@ -86,7 +90,7 @@ public class ImagePagerFragment extends BaseFragment {
 
 		@Override
 		public int getCount() {
-			return imageUrls.length;
+			return 1;
 		}
 
 		@Override
@@ -96,7 +100,10 @@ public class ImagePagerFragment extends BaseFragment {
 			ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
 			final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
-			ImageLoader.getInstance().displayImage(imageUrls[position], imageView, options, new SimpleImageLoadingListener() {
+//			ImageLoader.getInstance().displayImage(imageUrls[position], imageView, options, new SimpleImageLoadingListener() {
+				
+			
+			ImageLoader.getInstance().displayImage(imageurl, imageView, options, new SimpleImageLoadingListener() {
 				@Override
 				public void onLoadingStarted(String imageUri, View view) {
 					spinner.setVisibility(View.VISIBLE);

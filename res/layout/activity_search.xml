@@ -60,15 +60,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/roaming_around" />
 
-    <Button
-        android:id="@+id/about_me_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/textView1"
-        android:text="About Me"
-        android:textColor="@color/insta" />
-
+    
     <ImageButton
         android:id="@+id/search_button"
         android:layout_width="35dp"
@@ -84,6 +76,15 @@
         android:layout_alignBottom="@+id/textView2"
         android:layout_alignTop="@+id/textView2"
         android:layout_toRightOf="@+id/textView2"
-        android:src="@drawable/icon" />
+        android:src="@drawable/nearby" />
+
+    <ImageButton
+        android:id="@+id/about_me_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/profile" />
 
 </RelativeLayout>

@@ -27,7 +27,7 @@
     <application
         android:name=".app.AppController"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -66,6 +66,10 @@
             android:label="@string/title_activity_places" >
         </activity>
         <activity
+            android:name="com.example.facebook_login.gallery.SimpleImageActivity"
+            android:label="@string/title_activity_places" >
+        </activity>
+        <activity
             android:name=".BaseListElement"
             android:label="@string/title_activity_places" >
         </activity>
@@ -96,3 +100,4 @@
     </application>
 
 </manifest>
+

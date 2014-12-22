@@ -1,9 +1,5 @@
 package com.example.facebook_login;
 
-import com.example.facebook_login.adater.CustomListAdapter;
-import com.example.facebook_login.app.AppController;
-import com.example.facebook_login.model.Movie;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,27 +9,25 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.facebook_login.adater.CustomListAdapter;
+import com.example.facebook_login.app.AppController;
+import com.example.facebook_login.model.Movie;
 //import com.example.facebook_login.JsonArrayRequest;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 public class PlacesListViewActivity extends Activity implements OnItemClickListener{
 	private static final String TAG = PlacesListViewActivity.class.getSimpleName();
@@ -59,6 +53,12 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_places_list_view);
+		
+		pDialog = new ProgressDialog(this);
+		// Showing progress dialog before making http request
+		pDialog.setMessage("Loading...Please Wait");
+		pDialog.show();
+		
 		Bundle bundle = getIntent().getExtras();
 		filename = bundle.getString("Filename");
 //		fbaccesstoken = bundle.getString("AccessToken");
@@ -70,6 +70,9 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 		Log.d("URL",url);
 		listView = (ListView) findViewById(R.id.list);
 		adapter = new CustomListAdapter(this, movieList);
+		
+		callJson();
+		
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -78,27 +81,8 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	                int position, long id) {
 	        	
 	        	String getData = listView.getItemAtPosition(position).toString();
-//	        	String getItemData = listView.getSelectedItem().toString();
-	        	Toast.makeText(PlacesListViewActivity.this,getData,Toast.LENGTH_SHORT).show();
-//	        	Log.d("itemSelected", getData);
-//	        	getItem = (Movie)parent.getItem(position);
-//	        	getItem = (Movie) listView.getSelectedItem();
-//	        	String getData = getItem.getData();
-//	        	Log.d("itemSelected", getItem);
-	        	Intent intent = new Intent(PlacesListViewActivity.this, FlipPlacesActivity.class);
-//	        	intent.putExtra("GetData",getData);
-//	        	intent.putExtra("Latlong",movie);
+//	        	Toast.makeText(PlacesListViewActivity.this,getData,Toast.LENGTH_SHORT).show();
 	        	
-//	        	String movielist = movieList.get(position).getTitle();
-//	        	
-//	        	
-//	        	
-//	        	String thumbnailurl = movieList.get(position).getThumbnailUrl();
-//	        	int year = movieList.get(position).getYear();
-//	        	double rating = movieList.get(position).getRating();
-//	        	double latitude = movieList.get(position).getLatitude();
-//	        	double longitude = movieList.get(position).getLongitude();
-//	        	List<String> listgenre = movieList.get(position).getGenre();
 	        	
 	        	String thumbnailurl = movieList.get(position).getThumbnailUrl();
 	        	String title = movieList.get(position).getTitle();
@@ -108,9 +92,8 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 	        	double latitude = movieList.get(position).getLatitude();
 	        	double longitude = movieList.get(position).getLongitude();
 	        	String images = movieList.get(position).getImages();
-
-
 	    		
+	        	Intent intent = new Intent(PlacesListViewActivity.this, FlipPlacesActivity.class);
 	    		intent.putExtra("URL",thumbnailurl);
 	    		intent.putExtra("Title",title);
 	    		intent.putExtra("Category",category);
@@ -122,90 +105,99 @@ public class PlacesListViewActivity extends Activity implements OnItemClickListe
 //	    		intent.putExtra("Longitude",String.valueOf(longitude));
 	    		intent.putExtra("Longitude",(longitude));
 	    		startActivity(intent);
-	        	
+	    		pDialog = new ProgressDialog(PlacesListViewActivity.this);
+				// Showing progress dialog before making http request
+				pDialog.setMessage("Loading...Please Wait");
+				pDialog.show();
 	        }
 	       
 		});
 		
+//		pDialog = new ProgressDialog(this);
+//		// Showing progress dialog before making http request
+//		pDialog.setMessage("Loading...Please Wait");
+//		pDialog.show();
 		 
 				
-		pDialog = new ProgressDialog(this);
-		// Showing progress dialog before making http request
-		pDialog.setMessage("Loading...");
-		pDialog.show();
+		
 
 		// changing action bar color
 		getActionBar().setBackgroundDrawable(
 				new ColorDrawable(Color.parseColor("#1b1b1b")));
 		
+	
+		
+	}
+	
+	public void callJson(){
 		// Creating volley request obj
-		JsonArrayRequest movieReq = new JsonArrayRequest(url,
-				new Response.Listener<JSONArray>() {
-					
-					@Override
-					public void onResponse(JSONArray response) {
-//						Log.d(TAG, response.toString());
-						hidePDialog();
-
-						// Parsing json
-						for (int i = 0; i < response.length(); i++) {
-							try {
-
-								JSONObject obj = response.getJSONObject(i);
-								Movie movie = new Movie();
-								if(obj.getString("title").equals("Kota Batam")){
-									
-								
-								}
-								else{
-									if(obj.getString("description").equals("")){
-										movie.setDescription("");
-									}
-									else{
-										movie.setDescription(obj.getString("description"));
-									}
-								movie.setThumbnailUrl(obj.getString("image"));
-								movie.setTitle(obj.getString("title"));
-								movie.setCategory(obj.getString("category"));
-								
-								movie.setCheckins(obj.getInt("checkins"));
-								movie.setLatitude(((Number) obj.get("latitude")).doubleValue());
-								movie.setLongitude(((Number) obj.get("longitude")).doubleValue());
-								movie.setImages(obj.getString("images"));
-								// Genre is json array
-//								JSONArray genreArry = obj.getJSONArray("genre");
-//								ArrayList<String> genre = new ArrayList<String>();
-//								for (int j = 0; j < genreArry.length(); j++) {
-//									genre.add((String) genreArry.get(j));
-//								}
-//								movie.setGenre(genre);
-
-								// adding movie to movies array
-								movieList.add(movie);
-								}	
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
+				JsonArrayRequest movieReq = new JsonArrayRequest(url,
+						new Response.Listener<JSONArray>() {
 							
+							@Override
+							public void onResponse(JSONArray response) {
+//								Log.d(TAG, response.toString());
+								hidePDialog();
 
-						}
+								// Parsing json
+								for (int i = 0; i < response.length(); i++) {
+									try {
+
+										JSONObject obj = response.getJSONObject(i);
+										Movie movie = new Movie();
+										if(obj.getString("title").equals("Kota Batam")){
 											
-						
-						// notifying list adapter about data changes
-						// so that it renders the list view with updated data
-						adapter.notifyDataSetChanged();
-					}
-				}, new Response.ErrorListener() {
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						VolleyLog.d(TAG, "Error: " + error.getMessage());
-						hidePDialog();
+										
+										}
+										else{
+											if(obj.getString("description").equals("")){
+												movie.setDescription("");
+											}
+											else{
+												movie.setDescription(obj.getString("description"));
+											}
+										movie.setThumbnailUrl(obj.getString("image"));
+										movie.setTitle(obj.getString("title"));
+										movie.setCategory(obj.getString("category"));
+										
+										movie.setCheckins(obj.getInt("checkins"));
+										movie.setLatitude(((Number) obj.get("latitude")).doubleValue());
+										movie.setLongitude(((Number) obj.get("longitude")).doubleValue());
+										movie.setImages(obj.getString("images"));
+										// Genre is json array
+//										JSONArray genreArry = obj.getJSONArray("genre");
+//										ArrayList<String> genre = new ArrayList<String>();
+//										for (int j = 0; j < genreArry.length(); j++) {
+//											genre.add((String) genreArry.get(j));
+//										}
+//										movie.setGenre(genre);
 
-					}
-				});
+										// adding movie to movies array
+										movieList.add(movie);
+										}	
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+									
 
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(movieReq);
+								}
+													
+								
+								// notifying list adapter about data changes
+								// so that it renders the list view with updated data
+								adapter.notifyDataSetChanged();
+							}
+						}, new Response.ErrorListener() {
+							@Override
+							public void onErrorResponse(VolleyError error) {
+								VolleyLog.d(TAG, "Error: " + error.getMessage());
+								hidePDialog();
+
+							}
+						});
+
+				// Adding request to request queue
+				AppController.getInstance().addToRequestQueue(movieReq);
 	}
 
 	@Override

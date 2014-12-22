@@ -18,6 +18,7 @@ package com.example.facebook_login.gallery;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.example.facebook_login.gallery.Constants;
 import com.example.facebook_login.R;
@@ -36,27 +37,52 @@ public class SimpleImageActivity extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.places_listview);
-		
+//		setContentView(R.layout.places_listview);
+		Bundle bundle = getIntent().getExtras();
 		imageLoader = ImageLoader.getInstance();
 		imageLoader.init(ImageLoaderConfiguration.createDefault(this));
 		
+		
+		String selected_image = bundle.getString("Selected_image");
+//		Log.d("SelectedURL",selected_image);
+		
+		Fragment fragment = new Fragment();
+		Bundle bundleforfragment = new Bundle();
+		bundle.putString("SelectedURL", selected_image);
+		fragment.setArguments(bundle);
+		
 		int frIndex = getIntent().getIntExtra(Constants.Extra.FRAGMENT_INDEX, 0);
+		
 		Fragment fr;
 		String tag;
 		int titleRes;
-		switch (frIndex) {
-			default:
-			
-			case ImageGalleryFragment.INDEX:
-				tag = ImageGalleryFragment.class.getSimpleName();
-				fr = getSupportFragmentManager().findFragmentByTag(tag);
-				if (fr == null) {
-					fr = new ImageGalleryFragment();
-				}
-				titleRes = R.string.ac_name_image_gallery;
-				break;
+		tag = ImagePagerFragment.class.getSimpleName();
+		fr = getSupportFragmentManager().findFragmentByTag(tag);
+		if (fr == null) {
+			fr = new ImagePagerFragment();
+			fr.setArguments(getIntent().getExtras());
 		}
+		titleRes = R.string.app_name;
+//		switch (frIndex) {
+//			default:
+//			case ImageGalleryFragment.INDEX:
+//				tag = ImageGalleryFragment.class.getSimpleName();
+//				fr = getSupportFragmentManager().findFragmentByTag(tag);
+//				if (fr == null) {
+//					fr = new ImageGalleryFragment();
+//				}
+//				titleRes = R.string.ac_name_image_gallery;
+//				break;
+//			case ImagePagerFragment.INDEX:
+//				tag = ImagePagerFragment.class.getSimpleName();
+//				fr = getSupportFragmentManager().findFragmentByTag(tag);
+//				if (fr == null) {
+//					fr = new ImagePagerFragment();
+//					fr.setArguments(getIntent().getExtras());
+//				}
+//				titleRes = R.string.app_name;
+//				break;
+//		}
 
 		setTitle(titleRes);
 		getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fr, tag).commit();

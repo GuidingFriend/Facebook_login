@@ -1,56 +1,42 @@
 package com.example.facebook_login;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import com.example.facebook_login.model.Movie;
-import com.squareup.picasso.Picasso;
-
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ViewFlipper;
 
+import com.example.facebook_login.gallery.SimpleImageActivity;
+import com.squareup.picasso.Picasso;
+
+@SuppressWarnings("deprecation")
 public class FlipPlacesActivity extends Activity{
 	
 	public int currentimageindex=0;
-
-  ImageView imageView;
+	private ProgressDialog pDialog;
+  ImageView imageView, imageView1, imageView2, imageView3;
   ImageButton openmap ;
   double lat, longi;
-  private ViewFlipper viewFlipper;
-  private float lastX;
-  
+    
   List<String> splitter;
   
   private TextView dispData, titleView,category;
@@ -91,12 +77,56 @@ public class FlipPlacesActivity extends Activity{
         }
         imageView = (ImageView)findViewById(R.id.ImageView01);
         Picasso.with(getBaseContext()).load(splitter.get(0).toString()).into(imageView);
-        imageView = (ImageView)findViewById(R.id.ImageView02);
-        Picasso.with(getBaseContext()).load(splitter.get(1).toString()).into(imageView);
-        imageView = (ImageView)findViewById(R.id.ImageView03);
-        Picasso.with(getBaseContext()).load(splitter.get(2).toString()).into(imageView);
-        imageView = (ImageView)findViewById(R.id.ImageView04);
-        Picasso.with(getBaseContext()).load(splitter.get(3).toString()).into(imageView);
+        imageView1 = (ImageView)findViewById(R.id.ImageView02);
+        Picasso.with(getBaseContext()).load(splitter.get(1).toString()).into(imageView1);
+        imageView2 = (ImageView)findViewById(R.id.ImageView03);
+        Picasso.with(getBaseContext()).load(splitter.get(2).toString()).into(imageView2);
+        imageView3 = (ImageView)findViewById(R.id.ImageView04);
+        Picasso.with(getBaseContext()).load(splitter.get(3).toString()).into(imageView3);
+        
+        imageView.setOnClickListener(new OnClickListener() {
+            
+
+			@Override
+            public void onClick(View v) {
+            	Intent intent = new Intent(FlipPlacesActivity.this, SimpleImageActivity.class);
+            	intent.putExtra("Selected_image", splitter.get(0).toString());
+            	startActivity(intent);
+            }
+        });
+        
+        imageView1.setOnClickListener(new OnClickListener() {
+            
+
+			@Override
+            public void onClick(View v) {
+            	Intent intent = new Intent(FlipPlacesActivity.this, SimpleImageActivity.class);
+            	intent.putExtra("Selected_image1", splitter.get(1).toString());
+            	startActivity(intent);
+            }
+        });
+
+        imageView2.setOnClickListener(new OnClickListener() {
+    
+
+	@Override
+    public void onClick(View v) {
+    	Intent intent = new Intent(FlipPlacesActivity.this, SimpleImageActivity.class);
+    	intent.putExtra("Selected_image2", splitter.get(2).toString());
+    	startActivity(intent);
+    }
+});
+
+        imageView3.setOnClickListener(new OnClickListener() {
+    
+
+	@Override
+    public void onClick(View v) {
+    	Intent intent = new Intent(FlipPlacesActivity.this, SimpleImageActivity.class);
+    	intent.putExtra("Selected_image3", splitter.get(3).toString());
+    	startActivity(intent);
+    }
+});
 
         lat=bundle.getDouble("Latitude");
         longi=bundle.getDouble("Longitude");
@@ -114,6 +144,10 @@ public class FlipPlacesActivity extends Activity{
         Intent i = new
         Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
         startActivity(i);
+        pDialog = new ProgressDialog(FlipPlacesActivity.this);
+		// Showing progress dialog before making http request
+		pDialog.setMessage("Loading...Please Wait");
+		pDialog.show();
         }
         });
 
