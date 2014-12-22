@@ -84,6 +84,6 @@
         android:layout_alignBottom="@+id/textView2"
         android:layout_alignTop="@+id/textView2"
         android:layout_toRightOf="@+id/textView2"
-        android:src="@drawable/nearby" />
+        android:src="@drawable/icon" />
 
 </RelativeLayout>

@@ -188,6 +188,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 			public void onClick(View v) {
 				testHttp();
 				Intent i = new Intent(SearchActivity.this, PlacesListViewActivity.class);
+				i.putExtra("Filename",filename);
 				startActivity(i);
 //                Toast.makeText(getBaseContext(),"Opening Map..",Toast.LENGTH_SHORT).show();
 //                onClickGPS();
@@ -203,7 +204,7 @@ public class SearchActivity extends ActionBarActivity implements OnClickListener
 //				testHttp();
 				Intent i = new Intent(SearchActivity.this, FbMainActivity.class);
 				startActivity(i);
-                Toast.makeText(getBaseContext(),"Opening Map..",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getBaseContext(),"Opening Map..",Toast.LENGTH_SHORT).show();
 //                onClickGPS();
                
             }
